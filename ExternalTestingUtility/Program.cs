@@ -1,18 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
-using SMC.UI.Core.Controls;
+﻿using SMC.UI.Core.Controls;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace t7c_installer
 {
