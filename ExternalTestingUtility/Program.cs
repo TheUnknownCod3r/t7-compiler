@@ -1,4 +1,5 @@
-﻿using SMC.UI.Core.Controls;
+﻿using Newtonsoft.Json.Linq;
+using SMC.UI.Core.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,9 +8,11 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace t7c_installer
 {
@@ -156,12 +159,24 @@ namespace t7c_installer
 
         public static void FetchUpdateContents()
         {
-            if (File.Exists(UpdateTempFilename)) File.Delete(UpdateTempFilename);
-            if (Directory.Exists(UpdateTempDirname)) Directory.Delete(UpdateTempDirname, true);
+            if (File.Exists(UpdateTempFilename))
+                File.Delete(UpdateTempFilename);
+
+            if (Directory.Exists(UpdateTempDirname))
+                Directory.Delete(UpdateTempDirname, true);
+
+            string downloadUrl =
+                "https://github.com/shiversoftdev/t7-compiler/releases/latest/download/update.zip";
+
             using (WebClient client = new WebClient())
             {
-                client.DownloadFile(PackageURL, UpdateTempFilename);
+                client.Headers.Add("User-Agent", "T7Compiler-Updater");
+                client.DownloadFile(downloadUrl, UpdateTempFilename);
             }
+
+            if (!File.Exists(UpdateTempFilename))
+                throw new Exception("Download failed — update.zip was not created.");
+
             ZipFile.ExtractToDirectory(UpdateTempFilename, UpdateTempDirname);
         }
 
